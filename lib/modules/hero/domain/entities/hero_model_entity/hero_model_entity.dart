@@ -1,15 +1,14 @@
+import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/appearance.dart';
+import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/biography.dart';
+import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/connections.dart';
+import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/images.dart';
+import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/powerstats.dart';
+import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/work.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'appearance.dart';
-import 'biography.dart';
-import 'connections.dart';
-import 'images.dart';
-import 'powerstats.dart';
-import 'work.dart';
 
 part 'hero_model_entity.freezed.dart';
 
-@freezed
+@unfreezed
 class HeroModelEntity with _$HeroModelEntity {
   factory HeroModelEntity({
     int? id,

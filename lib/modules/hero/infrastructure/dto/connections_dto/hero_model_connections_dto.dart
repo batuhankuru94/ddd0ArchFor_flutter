@@ -6,13 +6,13 @@ part 'hero_model_connections_dto.g.dart';
 
 @freezed
 class ConnectionsDto with _$ConnectionsDto {
-  const ConnectionsDto._();
   factory ConnectionsDto({
     String? groupAffiliation,
     String? relatives,
   }) = _ConnectionsDto;
-  Connections toEntity() =>
-      Connections(groupAffiliation: groupAffiliation, relatives: relatives);
   factory ConnectionsDto.fromJson(Map<String, dynamic> json) =>
       _$ConnectionsDtoFromJson(json);
+  const ConnectionsDto._();
+  Connections toEntity() =>
+      Connections(groupAffiliation: groupAffiliation, relatives: relatives);
 }

@@ -2,26 +2,28 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/hero_model_entity.dart';
+import 'package:ddd0arch/modules/hero/infrastructure/repository/hero_repository.dart';
 import 'package:dio/dio.dart';
-import 'package:meta/meta.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:injectable/injectable.dart';
 
-import '../../infrastructure/repository/hero_repository.dart';
+import '../../domain/interfaces/i_hero_repository.dart';
 
 part 'hero_model_cubic_cubit.freezed.dart';
 
+@singleton
+@injectable
 class HeroModelCubicCubit extends Cubit<HeroModelCubicState> {
-  HeroModelCubicCubit() : super(const HeroModelCubicState.initial());
-
+  HeroModelCubicCubit({required this.repository})
+      : super(const HeroModelCubicState.initial());
+  IHeroRepository repository;
   Future<void> getHeros() async {
-    final y = HeroRepository();
-
     try {
       emit(const HeroModelCubicState.loading());
 
-      final models = await y.getHeroModel();
+      final models = await repository.getHeroModel();
       log('model çekilme başarılı');
-
+      inspect(models);
       if (models.isEmpty) {
         emit(const HeroModelCubicState.emtyList());
       } else {
@@ -54,7 +56,7 @@ class HeroModelCubicCubit extends Cubit<HeroModelCubicState> {
     state.maybeWhen(
       orElse: () {},
       done: (model) {
-        Stopwatch stopwatch = Stopwatch()..start();
+        final stopwatch = Stopwatch()..start();
         emit(const HeroModelCubicState.loading());
 
         if (model[index].bookMark) {

@@ -17,14 +17,23 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$HeroModelEntity {
   int? get id => throw _privateConstructorUsedError;
+  set id(int? value) => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
+  set name(String? value) => throw _privateConstructorUsedError;
   String? get slug => throw _privateConstructorUsedError;
+  set slug(String? value) => throw _privateConstructorUsedError;
   Powerstats? get powerstats => throw _privateConstructorUsedError;
+  set powerstats(Powerstats? value) => throw _privateConstructorUsedError;
   Appearance? get appearance => throw _privateConstructorUsedError;
+  set appearance(Appearance? value) => throw _privateConstructorUsedError;
   Biography? get biography => throw _privateConstructorUsedError;
+  set biography(Biography? value) => throw _privateConstructorUsedError;
   Work? get work => throw _privateConstructorUsedError;
+  set work(Work? value) => throw _privateConstructorUsedError;
   Connections? get connections => throw _privateConstructorUsedError;
+  set connections(Connections? value) => throw _privateConstructorUsedError;
   Images? get images => throw _privateConstructorUsedError;
+  set images(Images? value) => throw _privateConstructorUsedError;
   bool get selected => throw _privateConstructorUsedError;
   set selected(bool value) => throw _privateConstructorUsedError;
   bool get bookMark => throw _privateConstructorUsedError;
@@ -332,23 +341,23 @@ class _$HeroModelEntityImpl implements _HeroModelEntity {
       this.bookMark = false});
 
   @override
-  final int? id;
+  int? id;
   @override
-  final String? name;
+  String? name;
   @override
-  final String? slug;
+  String? slug;
   @override
-  final Powerstats? powerstats;
+  Powerstats? powerstats;
   @override
-  final Appearance? appearance;
+  Appearance? appearance;
   @override
-  final Biography? biography;
+  Biography? biography;
   @override
-  final Work? work;
+  Work? work;
   @override
-  final Connections? connections;
+  Connections? connections;
   @override
-  final Images? images;
+  Images? images;
   @override
   @JsonKey()
   bool selected;
@@ -371,36 +380,45 @@ class _$HeroModelEntityImpl implements _HeroModelEntity {
 
 abstract class _HeroModelEntity implements HeroModelEntity {
   factory _HeroModelEntity(
-      {final int? id,
-      final String? name,
-      final String? slug,
-      final Powerstats? powerstats,
-      final Appearance? appearance,
-      final Biography? biography,
-      final Work? work,
-      final Connections? connections,
-      final Images? images,
+      {int? id,
+      String? name,
+      String? slug,
+      Powerstats? powerstats,
+      Appearance? appearance,
+      Biography? biography,
+      Work? work,
+      Connections? connections,
+      Images? images,
       bool selected,
       bool bookMark}) = _$HeroModelEntityImpl;
 
   @override
   int? get id;
+  set id(int? value);
   @override
   String? get name;
+  set name(String? value);
   @override
   String? get slug;
+  set slug(String? value);
   @override
   Powerstats? get powerstats;
+  set powerstats(Powerstats? value);
   @override
   Appearance? get appearance;
+  set appearance(Appearance? value);
   @override
   Biography? get biography;
+  set biography(Biography? value);
   @override
   Work? get work;
+  set work(Work? value);
   @override
   Connections? get connections;
+  set connections(Connections? value);
   @override
   Images? get images;
+  set images(Images? value);
   @override
   bool get selected;
   set selected(bool value);

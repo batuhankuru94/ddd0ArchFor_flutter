@@ -7,7 +7,6 @@ part 'hero_mode_powerstats_dto.g.dart';
 
 @freezed
 class PowerstatsDto with _$PowerstatsDto {
-  const PowerstatsDto._();
 
   const factory PowerstatsDto(
       {int? intelligence,
@@ -15,14 +14,15 @@ class PowerstatsDto with _$PowerstatsDto {
       int? speed,
       int? durability,
       int? power,
-      int? combat}) = _HeroModelPowerstatsDto;
+      int? combat,}) = _HeroModelPowerstatsDto;
+  factory PowerstatsDto.fromJson(Map<String, Object?> json) =>
+      _$PowerstatsDtoFromJson(json);
+  const PowerstatsDto._();
   Powerstats toEntity() => Powerstats(
       intelligence: intelligence,
       strength: strength,
       speed: speed,
       durability: durability,
       power: power,
-      combat: combat);
-  factory PowerstatsDto.fromJson(Map<String, Object?> json) =>
-      _$PowerstatsDtoFromJson(json);
+      combat: combat,);
 }

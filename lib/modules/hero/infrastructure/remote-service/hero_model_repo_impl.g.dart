@@ -8,7 +8,7 @@ part of 'hero_model_repo_impl.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _RestClient implements RestClient {
+class _RestClient implements HeroRestClient {
   _RestClient(
     this._dio, {
     this.baseUrl,

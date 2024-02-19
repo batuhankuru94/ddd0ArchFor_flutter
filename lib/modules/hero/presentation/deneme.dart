@@ -1,18 +1,14 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
-import 'package:collection/collection.dart';
 
-import 'package:auto_route/auto_route.dart';
-import 'package:dio/dio.dart';
+import 'package:collection/collection.dart';
+import 'package:ddd0arch/core/di/di.dart';
+import 'package:ddd0arch/modules/hero/application/herocubit/hero_model_cubic_cubit.dart';
+import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/hero_model_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:async/async.dart';
 import 'package:shimmer/shimmer.dart';
-
-import '../application/hero/hero_model_cubic_cubit.dart';
-import '../domain/entities/hero_model_entity/hero_model_entity.dart';
 
 class MyWidget extends StatefulWidget {
   const MyWidget({super.key});
@@ -32,7 +28,7 @@ class _MyWidgetState extends State<MyWidget> {
   }
 
   fetchModels() async {
-    context.read<HeroModelCubicCubit>().getHeros();
+    await getIt<HeroModelCubicCubit>().getHeros();
   }
 
   @override
@@ -61,7 +57,7 @@ class _MyWidgetState extends State<MyWidget> {
                 },
               ),
             ),
-            initial: (value) => const Text('Selamlar'),
+            initial: (value) => const Text('Hoşgeldiniz'),
             loading: (value) => const Text('Yükleniyor'),
             emtyList: (value) => const Text('Liste boş'),
             error: (value) => const Text('Hatayla karşılaşıldı'),
@@ -74,8 +70,11 @@ class _MyWidgetState extends State<MyWidget> {
 }
 
 class HomePageSingleItem extends StatefulWidget {
-  const HomePageSingleItem(
-      {super.key, required this.models, required this.index});
+  const HomePageSingleItem({
+    required this.models,
+    required this.index,
+    super.key,
+  });
   final int index;
 
   final HeroModelEntity models;
@@ -155,16 +154,17 @@ class _HomePageSingleItemState extends State<HomePageSingleItem>
                           child: Hero(
                             tag: models.name ?? '',
                             child: Image3(
-                                images: [
-                                  models.images?.xs,
-                                  models.images?.sm,
-                                  models.images?.md,
-                                  models.images?.lg,
-                                ]
-                                    .where((element) => element != null)
-                                    .map((e) => e!)
-                                    .toList(),
-                                duration: const Duration(milliseconds: 400)),
+                              images: [
+                                models.images?.xs,
+                                models.images?.sm,
+                                models.images?.md,
+                                models.images?.lg,
+                              ]
+                                  .where((element) => element != null)
+                                  .map((e) => e!)
+                                  .toList(),
+                              duration: const Duration(milliseconds: 400),
+                            ),
                           ),
                         ),
                       ),
@@ -189,7 +189,8 @@ class _HomePageSingleItemState extends State<HomePageSingleItem>
                                 duration: const Duration(milliseconds: 100),
                                 height: model[index].selected ? 60 : 0,
                                 margin: const EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 10),
+                                  horizontal: 10,
+                                ),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -197,20 +198,22 @@ class _HomePageSingleItemState extends State<HomePageSingleItem>
                                     AnimatedContainer(
                                       duration:
                                           const Duration(milliseconds: 400),
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 0, horizontal: 0),
+                                      margin: const EdgeInsets.symmetric(),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(
                                           99,
                                         ),
                                         color: const Color.fromARGB(
-                                            255, 151, 178, 178),
+                                          255,
+                                          151,
+                                          178,
+                                          178,
+                                        ),
                                         boxShadow: [
                                           BoxShadow(
                                             color: Colors.black12.withOpacity(
-                                                model[index].selected
-                                                    ? 0
-                                                    : 0.2),
+                                              model[index].selected ? 0 : 0.2,
+                                            ),
                                             spreadRadius: 3,
                                             blurRadius: 3,
                                             offset: const Offset(0, 3),
@@ -218,36 +221,47 @@ class _HomePageSingleItemState extends State<HomePageSingleItem>
                                         ],
                                       ),
                                       child: IconButton.outlined(
-                                          onPressed: () {
-                                            context
-                                                .read<HeroModelCubicCubit>()
-                                                .changeMark(index);
-                                          },
-                                          style: OutlinedButton.styleFrom(
-                                            side: const BorderSide(
-                                                width: 0,
-                                                color: Colors.transparent),
+                                        onPressed: () {
+                                          context
+                                              .read<HeroModelCubicCubit>()
+                                              .changeMark(index);
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          side: const BorderSide(
+                                            width: 0,
+                                            color: Colors.transparent,
                                           ),
-                                          icon: AnimatedSwitcher(
-                                            duration: const Duration(
-                                                milliseconds: 200),
-                                            transitionBuilder: (Widget child,
-                                                Animation<double> animation) {
-                                              return ScaleTransition(
-                                                  scale: animation,
-                                                  child: child);
-                                            },
-                                            child: Icon(
-                                              model[index].bookMark
-                                                  ? Icons.bookmark_remove
-                                                  : Icons.bookmark_add,
-                                              key: ValueKey<bool>(
-                                                  model[index].bookMark),
-                                              color: const Color.fromRGBO(
-                                                  53, 101, 101, 1),
+                                        ),
+                                        icon: AnimatedSwitcher(
+                                          duration: const Duration(
+                                            milliseconds: 200,
+                                          ),
+                                          transitionBuilder: (
+                                            Widget child,
+                                            Animation<double> animation,
+                                          ) {
+                                            return ScaleTransition(
+                                              scale: animation,
+                                              child: child,
+                                            );
+                                          },
+                                          child: Icon(
+                                            model[index].bookMark
+                                                ? Icons.bookmark_remove
+                                                : Icons.bookmark_add,
+                                            key: ValueKey<bool>(
+                                              model[index].bookMark,
                                             ),
-                                          )),
-                                    )
+                                            color: const Color.fromRGBO(
+                                              53,
+                                              101,
+                                              101,
+                                              1,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -267,7 +281,7 @@ class _HomePageSingleItemState extends State<HomePageSingleItem>
                                   color: Color.fromRGBO(44, 101, 98, 1),
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -277,33 +291,36 @@ class _HomePageSingleItemState extends State<HomePageSingleItem>
                 Align(
                   alignment: Alignment.centerLeft,
                   child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 400),
-                      margin: EdgeInsets.symmetric(
-                          vertical: model[index].selected ? 60 : 75,
-                          horizontal: 35),
-                      padding: const EdgeInsets.all(18),
-                      constraints: const BoxConstraints(maxWidth: 200),
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(185, 151, 178, 178),
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12
-                                .withOpacity(model[index].selected ? 0 : 0.2),
-                            spreadRadius: 3,
-                            blurRadius: 3,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
+                    duration: const Duration(milliseconds: 400),
+                    margin: EdgeInsets.symmetric(
+                      vertical: model[index].selected ? 60 : 75,
+                      horizontal: 35,
+                    ),
+                    padding: const EdgeInsets.all(18),
+                    constraints: const BoxConstraints(maxWidth: 200),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(185, 151, 178, 178),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12
+                              .withOpacity(model[index].selected ? 0 : 0.2),
+                          spreadRadius: 3,
+                          blurRadius: 3,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      '${models.name}',
+                      maxLines: 1,
+                      style: const TextStyle(
+                        color: Color.fromRGBO(53, 101, 101, 1),
+                        fontWeight: FontWeight.w700,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      child: Text(
-                        '${models.name}',
-                        maxLines: 1,
-                        style: const TextStyle(
-                            color: Color.fromRGBO(53, 101, 101, 1),
-                            fontWeight: FontWeight.w700,
-                            overflow: TextOverflow.ellipsis),
-                      )),
+                    ),
+                  ),
                 ),
               ],
             );
@@ -333,7 +350,9 @@ class _BottomNavigationBarState extends State<BottomNavigationBar> {
       margin: const EdgeInsets.only(bottom: 15, left: 10, right: 10),
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30), color: Colors.black38),
+        borderRadius: BorderRadius.circular(30),
+        color: Colors.black38,
+      ),
       padding: const EdgeInsets.all(7),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
@@ -382,7 +401,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBar> {
                                 ),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -398,25 +417,26 @@ class _BottomNavigationBarState extends State<BottomNavigationBar> {
 }
 
 class BigOne extends SmallOne {
-  String name;
   BigOne({
     required this.name,
   }) : super(name: name);
+  @override
+  String name;
   talk() {
-    print(this.name);
+    print(name);
   }
 }
 
 class SmallOne {
-  String name;
   SmallOne({required this.name});
+  String name;
 }
 
 @immutable
 class Image3 extends StatefulWidget {
+  const Image3({required this.images, required this.duration, super.key});
   final List<String> images;
   final Duration duration;
-  const Image3({super.key, required this.images, required this.duration});
 
   @override
   State<Image3> createState() => _Image3State();
@@ -459,72 +479,75 @@ class _Image3State extends State<Image3> {
               ),
             ),
           ),
-          ...images.mapIndexed((index, element) => Image.network(
-                element,
-                height: height,
-                width: double.infinity,
-                filterQuality: FilterQuality.high,
-                cacheWidth: width.cacheSize(context),
-                cacheHeight: height.cacheSize(context),
-                fit: BoxFit.fill,
-                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  if (wasSynchronouslyLoaded) {
-                    return child;
-                  }
+          ...images.mapIndexed(
+            (index, element) => Image.network(
+              element,
+              height: height,
+              width: double.infinity,
+              filterQuality: FilterQuality.high,
+              cacheWidth: width.cacheSize(context),
+              cacheHeight: height.cacheSize(context),
+              fit: BoxFit.fill,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded) {
+                  return child;
+                }
 
-                  return AnimatedOpacity(
-                    opacity: states[index] ? 0 : 1,
-                    duration: duration,
-                    curve: Curves.easeOut,
-                    child: child,
-                  );
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) {
-                    isLoadingDone[index] = true;
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (context.mounted) {
-                        setState(() => states[index] = false);
-                      }
-                    });
-                    return child;
-                  } else {
-                    states[index] = true;
+                return AnimatedOpacity(
+                  opacity: states[index] ? 0 : 1,
+                  duration: duration,
+                  curve: Curves.easeOut,
+                  child: child,
+                );
+              },
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) {
+                  isLoadingDone[index] = true;
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (context.mounted) {
+                      setState(() => states[index] = false);
+                    }
+                  });
+                  return child;
+                } else {
+                  states[index] = true;
 
-                    return const SizedBox.shrink();
-                    // log(states.contains(false).toString());
-                    // return states.contains(false)
-                    //     ? const SizedBox.shrink()
-                    //     : SizedBox(
-                    //         width: double.infinity,
-                    //         height: double.infinity,
-                    //         child: Shimmer.fromColors(
-                    //           baseColor: Colors.black12,
-                    //           highlightColor: Colors.grey,
-                    //           child: Container(
-                    //             width: double.infinity,
-                    //             height: double.infinity,
-                    //             color: Colors.black,
-                    //           ),
-                    //         ),
-                    //       );
-                    print(isFirst(index));
-                    return isFirst(index)
-                        ? Shimmer.fromColors(
-                            baseColor: Colors.black12,
-                            highlightColor: Colors.grey,
-                            child: SizedBox(
-                              width: width,
-                              height: height,
-                            ))
-                        : const SizedBox.shrink();
-                  }
-
+                  return const SizedBox.shrink();
+                  // log(states.contains(false).toString());
+                  // return states.contains(false)
+                  //     ? const SizedBox.shrink()
+                  //     : SizedBox(
+                  //         width: double.infinity,
+                  //         height: double.infinity,
+                  //         child: Shimmer.fromColors(
+                  //           baseColor: Colors.black12,
+                  //           highlightColor: Colors.grey,
+                  //           child: Container(
+                  //             width: double.infinity,
+                  //             height: double.infinity,
+                  //             color: Colors.black,
+                  //           ),
+                  //         ),
+                  //       );
+                  print(isFirst(index));
                   return isFirst(index)
-                      ? const CircularProgressIndicator.adaptive()
+                      ? Shimmer.fromColors(
+                          baseColor: Colors.black12,
+                          highlightColor: Colors.grey,
+                          child: SizedBox(
+                            width: width,
+                            height: height,
+                          ),
+                        )
                       : const SizedBox.shrink();
-                },
-              )),
+                }
+
+                return isFirst(index)
+                    ? const CircularProgressIndicator.adaptive()
+                    : const SizedBox.shrink();
+              },
+            ),
+          ),
         ],
       ),
     );

@@ -7,7 +7,6 @@ part 'hero_model_biography_dto.g.dart';
 
 @freezed
 class BiographyDto with _$BiographyDto {
-  const BiographyDto._();
   @JsonSerializable(explicitToJson: true)
   const factory BiographyDto({
     String? fullName,
@@ -18,6 +17,9 @@ class BiographyDto with _$BiographyDto {
     String? publisher,
     String? alignment,
   }) = _BiographyDto;
+  factory BiographyDto.fromJson(Map<String, Object?> json) =>
+      _$BiographyDtoFromJson(json);
+  const BiographyDto._();
   Biography toEntity() => Biography(
       fullName: fullName,
       alterEgos: alterEgos,
@@ -25,7 +27,5 @@ class BiographyDto with _$BiographyDto {
       placeOfBirth: placeOfBirth,
       firstAppearance: firstAppearance,
       publisher: publisher,
-      alignment: alignment);
-  factory BiographyDto.fromJson(Map<String, Object?> json) =>
-      _$BiographyDtoFromJson(json);
+      alignment: alignment,);
 }

@@ -6,14 +6,14 @@ part 'hero_model_images_dto.g.dart';
 
 @freezed
 class ImagesDto with _$ImagesDto {
-  const ImagesDto._();
   factory ImagesDto({
     String? xs,
     String? sm,
     String? md,
     String? lg,
   }) = _ImagesDto;
-  Images toEntity() => Images(xs: xs, sm: sm, md: md, lg: lg);
   factory ImagesDto.fromJson(Map<String, dynamic> json) =>
       _$ImagesDtoFromJson(json);
+  const ImagesDto._();
+  Images toEntity() => Images(xs: xs, sm: sm, md: md, lg: lg);
 }

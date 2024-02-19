@@ -6,12 +6,12 @@ part 'hero_model_work_dto.g.dart';
 
 @freezed
 class WorkDto with _$WorkDto {
-  const WorkDto._();
   factory WorkDto({
     String? occupation,
     String? base,
   }) = _WorkDto;
-  Work toEntity() => Work(occupation: occupation, base: base);
   factory WorkDto.fromJson(Map<String, dynamic> json) =>
       _$WorkDtoFromJson(json);
+  const WorkDto._();
+  Work toEntity() => Work(occupation: occupation, base: base);
 }
