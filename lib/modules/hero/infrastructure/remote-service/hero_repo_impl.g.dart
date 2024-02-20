@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'hero_model_repo_impl.dart';
+part of 'hero_repo_impl.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'hero_model_repo_impl.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _RestClient implements HeroRestClient {
-  _RestClient(
+class _HeroRestClient implements HeroRestClient {
+  _HeroRestClient(
     this._dio, {
     this.baseUrl,
   }) {

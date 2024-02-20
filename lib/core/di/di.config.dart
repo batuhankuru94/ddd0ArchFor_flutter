@@ -12,12 +12,11 @@ import 'package:dio/dio.dart' as _i3;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import '../../modules/hero/application/herocubit/hero_model_cubic_cubit.dart'
-    as _i6;
+import '../../modules/hero/application/hero_model_cubic_cubit.dart' as _i6;
 import '../../modules/hero/domain/interfaces/i_hero_repository.dart' as _i4;
 import '../../modules/hero/infrastructure/repository/hero_repository.dart'
     as _i5;
-import '../http/dio.dart' as _i7;
+import '../client/dio.dart' as _i7;
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt

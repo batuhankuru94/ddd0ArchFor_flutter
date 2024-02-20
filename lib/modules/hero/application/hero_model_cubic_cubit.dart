@@ -1,14 +1,10 @@
 import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
-import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/hero_model_entity.dart';
-import 'package:ddd0arch/modules/hero/infrastructure/repository/hero_repository.dart';
-import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../domain/interfaces/i_hero_repository.dart';
-
+import '../domain/entities/hero_model_entity.dart';
+import '../domain/interfaces/i_hero_repository.dart';
 part 'hero_model_cubic_cubit.freezed.dart';
 
 @singleton

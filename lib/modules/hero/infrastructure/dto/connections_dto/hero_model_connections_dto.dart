@@ -1,5 +1,6 @@
-import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/connections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../../domain/entities/connections.dart';
 
 part 'hero_model_connections_dto.freezed.dart';
 part 'hero_model_connections_dto.g.dart';

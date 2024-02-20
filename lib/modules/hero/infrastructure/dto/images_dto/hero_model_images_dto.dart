@@ -1,5 +1,6 @@
-import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/images.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../../domain/entities/images.dart';
 
 part 'hero_model_images_dto.freezed.dart';
 part 'hero_model_images_dto.g.dart';

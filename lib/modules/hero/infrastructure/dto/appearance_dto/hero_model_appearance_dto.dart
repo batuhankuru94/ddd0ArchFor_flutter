@@ -1,6 +1,7 @@
-import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/appearance.dart';
 // ignore: depend_on_referenced_packages
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../../domain/entities/appearance.dart';
 
 part 'hero_model_appearance_dto.freezed.dart';
 

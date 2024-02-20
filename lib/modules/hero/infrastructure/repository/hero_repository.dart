@@ -1,8 +1,8 @@
-import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/hero_model_entity.dart';
-import 'package:ddd0arch/modules/hero/infrastructure/remote-service/hero_model_repo_impl.dart';
+import 'package:ddd0arch/modules/hero/infrastructure/remote-service/hero_repo_impl.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../domain/entities/hero_model_entity.dart';
 import '../../domain/interfaces/i_hero_repository.dart';
 
 @Injectable(as: IHeroRepository)
@@ -32,4 +32,3 @@ final class HeroRepository implements IHeroRepository {
         .toList();
   }
 }
-

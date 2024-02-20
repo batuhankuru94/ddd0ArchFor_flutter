@@ -1,8 +1,9 @@
-import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/hero_model_entity.dart';
-import 'package:ddd0arch/modules/hero/presentation/deneme.dart';
-import 'package:ddd0arch/modules/hero/presentation/deneme2.dart';
+import 'package:ddd0arch/modules/hero/presentation/landing_page.dart';
+import 'package:ddd0arch/modules/hero/presentation/hero_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../modules/hero/domain/entities/hero_model_entity.dart';
 
 GoRouter router = GoRouter(
   routes: [
@@ -11,10 +12,14 @@ GoRouter router = GoRouter(
       builder: (context, state) => const MyWidget(),
     ),
     GoRoute(
-      path: '/deneme',
+      path: '/detail',
       builder: (context, state) {
+        if (state.extra == null || !(state.extra! is HeroModelEntity)) {
+          throw Exception('gönderilen state veya model hatalı');
+        }
+
         final dto = state.extra! as HeroModelEntity;
-        return Homeless(
+        return HeroDetailPage(
           model: dto,
         );
       },

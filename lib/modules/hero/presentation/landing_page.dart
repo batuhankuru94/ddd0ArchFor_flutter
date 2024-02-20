@@ -1,14 +1,14 @@
 import 'dart:developer';
 import 'dart:ui';
-
 import 'package:collection/collection.dart';
 import 'package:ddd0arch/core/di/di.dart';
-import 'package:ddd0arch/modules/hero/application/herocubit/hero_model_cubic_cubit.dart';
-import 'package:ddd0arch/modules/hero/domain/entities/hero_model_entity/hero_model_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../application/hero_model_cubic_cubit.dart';
+import '../domain/entities/hero_model_entity.dart';
 
 class MyWidget extends StatefulWidget {
   const MyWidget({super.key});
@@ -37,7 +37,7 @@ class _MyWidgetState extends State<MyWidget> {
       extendBody: true,
       backgroundColor: const Color.fromRGBO(136, 191, 183, 1),
       appBar: AppBar(
-        title: const Text('data'),
+        title: const Text('Comics'),
         backgroundColor: Colors.transparent,
       ),
       body: BlocBuilder<HeroModelCubicCubit, HeroModelCubicState>(
@@ -58,7 +58,9 @@ class _MyWidgetState extends State<MyWidget> {
               ),
             ),
             initial: (value) => const Text('Hoşgeldiniz'),
-            loading: (value) => const Text('Yükleniyor'),
+            loading: (value) => const Center(
+              child: CircularProgressIndicator.adaptive(),
+            ),
             emtyList: (value) => const Text('Liste boş'),
             error: (value) => const Text('Hatayla karşılaşıldı'),
           );
@@ -148,7 +150,7 @@ class _HomePageSingleItemState extends State<HomePageSingleItem>
                         ),
                         child: InkWell(
                           onTap: () {
-                            context.push('/deneme', extra: widget.models);
+                            context.push('/detail', extra: widget.models);
                             log('detay sayfası index:${widget.index}');
                           },
                           child: Hero(
