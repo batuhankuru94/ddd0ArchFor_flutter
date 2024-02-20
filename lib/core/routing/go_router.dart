@@ -1,15 +1,15 @@
-import 'package:ddd0arch/modules/hero/presentation/landing_page.dart';
-import 'package:ddd0arch/modules/hero/presentation/hero_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../modules/hero/domain/entities/hero_model_entity.dart';
+import '../../modules/hero/presentation/pages/hero_detail.dart';
+import '../../modules/hero/presentation/pages/landing_page.dart';
 
 GoRouter router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const MyWidget(),
+      builder: (context, state) => const LandingPage(),
     ),
     GoRoute(
       path: '/detail',

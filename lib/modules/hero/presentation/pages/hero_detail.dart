@@ -1,7 +1,7 @@
-import 'package:ddd0arch/modules/hero/presentation/landing_page.dart';
 import 'package:flutter/material.dart';
 
-import '../domain/entities/hero_model_entity.dart';
+import '../../domain/entities/hero_model_entity.dart';
+import '../widget/image3_widget.dart';
 
 ///
 @immutable
@@ -14,8 +14,12 @@ class HeroDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(136, 191, 183, 1),
+      ),
+      backgroundColor: const Color.fromRGBO(136, 191, 183, 1),
       body: Hero(
-        tag: model.name ?? '',
+        tag: model.id.toString(),
         child: Image3(
           images: [
             model.images?.xs,

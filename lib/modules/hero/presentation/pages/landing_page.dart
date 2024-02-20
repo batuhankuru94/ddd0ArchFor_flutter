@@ -1,23 +1,22 @@
 import 'dart:developer';
-import 'dart:ui';
-import 'package:collection/collection.dart';
-import 'package:ddd0arch/core/di/di.dart';
+import 'package:ddd0arch/core/di/di.dart' as di;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
 
-import '../application/hero_model_cubic_cubit.dart';
-import '../domain/entities/hero_model_entity.dart';
+import '../../../../core/common/bottom_navigation_bar.dart';
+import '../../application/hero_model_cubic_cubit.dart';
+import '../../domain/entities/hero_model_entity.dart';
+import '../widget/image3_widget.dart';
 
-class MyWidget extends StatefulWidget {
-  const MyWidget({super.key});
+class LandingPage extends StatefulWidget {
+  const LandingPage({super.key});
 
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<LandingPage> createState() => _LandingPageState();
 }
 
-class _MyWidgetState extends State<MyWidget> {
+class _LandingPageState extends State<LandingPage> {
   List<HeroModelEntity>? models;
   final ScrollController _controller = ScrollController();
 
@@ -28,46 +27,50 @@ class _MyWidgetState extends State<MyWidget> {
   }
 
   fetchModels() async {
-    await getIt<HeroModelCubicCubit>().getHeros();
+    await di.getIt<HeroModelCubicCubit>().getHeros();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      backgroundColor: const Color.fromRGBO(136, 191, 183, 1),
-      appBar: AppBar(
-        title: const Text('Comics'),
-        backgroundColor: Colors.transparent,
-      ),
-      body: BlocBuilder<HeroModelCubicCubit, HeroModelCubicState>(
-        builder: (context, state) {
-          return state.map(
-            done: (value) => Scrollbar(
-              controller: _controller,
-              child: ListView.builder(
-                shrinkWrap: true,
-                controller: _controller,
-                itemCount: value.model.length,
-                itemBuilder: (context, index) {
-                  return HomePageSingleItem(
-                    models: value.model[index],
-                    index: index,
-                  );
-                },
-              ),
-            ),
-            initial: (value) => const Text('Hoşgeldiniz'),
-            loading: (value) => const Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
-            emtyList: (value) => const Text('Liste boş'),
-            error: (value) => const Text('Hatayla karşılaşıldı'),
-          );
-        },
-      ),
-      bottomNavigationBar: const BottomNavigationBar(),
-    );
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: di.getIt<HeroModelCubicCubit>()),
+        ],
+        child: Scaffold(
+          extendBody: true,
+          backgroundColor: const Color.fromRGBO(136, 191, 183, 1),
+          appBar: AppBar(
+            title: const Text('Comics'),
+            backgroundColor: Colors.transparent,
+          ),
+          body: BlocBuilder<HeroModelCubicCubit, HeroModelCubicState>(
+            builder: (context, state) {
+              return state.map(
+                done: (value) => Scrollbar(
+                  controller: _controller,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    controller: _controller,
+                    itemCount: value.model.length,
+                    itemBuilder: (context, index) {
+                      return HomePageSingleItem(
+                        models: value.model[index],
+                        index: index,
+                      );
+                    },
+                  ),
+                ),
+                initial: (value) => const Text('Hoşgeldiniz'),
+                loading: (value) => const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+                emtyList: (value) => const Text('Liste boş'),
+                error: (value) => const Text('Hatayla karşılaşıldı'),
+              );
+            },
+          ),
+          bottomNavigationBar: const BottomNavigationBarCustom(),
+        ));
   }
 }
 
@@ -154,7 +157,7 @@ class _HomePageSingleItemState extends State<HomePageSingleItem>
                             log('detay sayfası index:${widget.index}');
                           },
                           child: Hero(
-                            tag: models.name ?? '',
+                            tag: models.id.toString(),
                             child: Image3(
                               images: [
                                 models.images?.xs,
@@ -333,91 +336,6 @@ class _HomePageSingleItemState extends State<HomePageSingleItem>
   }
 }
 
-class BottomNavigationBar extends StatefulWidget {
-  const BottomNavigationBar({
-    super.key,
-  });
-
-  @override
-  State<BottomNavigationBar> createState() => _BottomNavigationBarState();
-}
-
-class _BottomNavigationBarState extends State<BottomNavigationBar> {
-  int selected = 0;
-  List<String> label = ['Home', 'Favorite', 'Settings'];
-  List<IconData> icons = [Icons.home, Icons.star, Icons.settings];
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 15, left: 10, right: 10),
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        color: Colors.black38,
-      ),
-      padding: const EdgeInsets.all(7),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ...label.mapIndexed((index, element) {
-              return GestureDetector(
-                onTap: () async {
-                  log('girdi');
-                  setState(() {
-                    selected = index;
-                  });
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 100),
-                  width: selected == index ? 120 : 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(176, 209, 201, 0.8),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: OverflowBox(
-                      maxWidth: 120,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            icons[index],
-                            color: const Color.fromRGBO(44, 101, 98, 1),
-                          ),
-                          Visibility(
-                            maintainAnimation: true,
-                            maintainState: true,
-                            visible: selected == index ? true : false,
-                            child: AnimatedOpacity(
-                              opacity: selected == index ? 1 : 0,
-                              duration: const Duration(milliseconds: 100),
-                              child: Text(
-                                ' $element',
-                                style: const TextStyle(
-                                  color: Color.fromRGBO(44, 101, 98, 1),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class BigOne extends SmallOne {
   BigOne({
     required this.name,
@@ -434,135 +352,7 @@ class SmallOne {
   String name;
 }
 
-@immutable
-class Image3 extends StatefulWidget {
-  const Image3({required this.images, required this.duration, super.key});
-  final List<String> images;
-  final Duration duration;
-
-  @override
-  State<Image3> createState() => _Image3State();
-}
-
-class _Image3State extends State<Image3> {
-  List<String> images = [];
-  List<bool> states = [];
-  List<bool> isLoadingDone = [];
-  late Duration duration;
-  @override
-  void initState() {
-    images = widget.images;
-    duration = widget.duration;
-    states = List.generate(images.length, (index) => true);
-    isLoadingDone = List.generate(images.length, (index) => false);
-    super.initState();
-  }
-
-  double height = 300;
-  double width = 350;
-  bool isFirst(int index) => index == 0 ? true : false;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      child: Stack(
-        children: [
-          SizedBox(
-            child: Shimmer.fromColors(
-              baseColor: Colors.black26,
-              highlightColor: Colors.white30,
-              // Color(0xFFEBEBF4),
-
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Colors.black26,
-              ),
-            ),
-          ),
-          ...images.mapIndexed(
-            (index, element) => Image.network(
-              element,
-              height: height,
-              width: double.infinity,
-              filterQuality: FilterQuality.high,
-              cacheWidth: width.cacheSize(context),
-              cacheHeight: height.cacheSize(context),
-              fit: BoxFit.fill,
-              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                if (wasSynchronouslyLoaded) {
-                  return child;
-                }
-
-                return AnimatedOpacity(
-                  opacity: states[index] ? 0 : 1,
-                  duration: duration,
-                  curve: Curves.easeOut,
-                  child: child,
-                );
-              },
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) {
-                  isLoadingDone[index] = true;
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (context.mounted) {
-                      setState(() => states[index] = false);
-                    }
-                  });
-                  return child;
-                } else {
-                  states[index] = true;
-
-                  return const SizedBox.shrink();
-                  // log(states.contains(false).toString());
-                  // return states.contains(false)
-                  //     ? const SizedBox.shrink()
-                  //     : SizedBox(
-                  //         width: double.infinity,
-                  //         height: double.infinity,
-                  //         child: Shimmer.fromColors(
-                  //           baseColor: Colors.black12,
-                  //           highlightColor: Colors.grey,
-                  //           child: Container(
-                  //             width: double.infinity,
-                  //             height: double.infinity,
-                  //             color: Colors.black,
-                  //           ),
-                  //         ),
-                  //       );
-                  print(isFirst(index));
-                  return isFirst(index)
-                      ? Shimmer.fromColors(
-                          baseColor: Colors.black12,
-                          highlightColor: Colors.grey,
-                          child: SizedBox(
-                            width: width,
-                            height: height,
-                          ),
-                        )
-                      : const SizedBox.shrink();
-                }
-
-                return isFirst(index)
-                    ? const CircularProgressIndicator.adaptive()
-                    : const SizedBox.shrink();
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 Future<bool> helloworld() async {
   await Future.delayed(const Duration(seconds: 3));
   return true;
-}
-
-extension ImageExtension on num {
-  int cacheSize(BuildContext context) {
-    return (this * MediaQuery.of(context).devicePixelRatio).round();
-  }
 }
