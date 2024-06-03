@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:ddd0arch/modules/hero/infrastructure/remote-service/hero_repo_impl.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
@@ -14,7 +16,10 @@ final class HeroRepository implements IHeroRepository {
           dio,
         );
   Future<List<HeroModelEntity>> getHeroModel() async {
-    final listTask = await _client.getTasks();
+    final listTask = await _client.getTasks().catchError((err) {
+      log(err);
+      return err;
+    });
 
     return listTask
         .map(
